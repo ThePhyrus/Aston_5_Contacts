@@ -1,6 +1,5 @@
 package roman.bannikov.aston_5_fragments
 
-
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -12,9 +11,13 @@ import androidx.fragment.app.activityViewModels
 import roman.bannikov.aston_5_fragments.databinding.FragmentContactListBinding
 import roman.bannikov.aston_5_fragments.databinding.ListItemBinding
 
+
 class ContactListFragment : Fragment() {
+
+    private var _binding: FragmentContactListBinding? = null
+    private val binding: FragmentContactListBinding get() = _binding!!
+
     private var cursor: Cursor? = null
-    private lateinit var binding: FragmentContactListBinding
     private var isDualPanel: View? = null
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -22,7 +25,7 @@ class ContactListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentContactListBinding.inflate(inflater, container, false)
+        _binding = FragmentContactListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -116,5 +119,10 @@ class ContactListFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = ContactListFragment()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

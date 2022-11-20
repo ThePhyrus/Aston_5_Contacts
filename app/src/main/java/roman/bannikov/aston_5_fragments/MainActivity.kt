@@ -8,17 +8,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
+
 class MainActivity : AppCompatActivity() {
-    private lateinit var pLauncher: ActivityResultLauncher<Array<String>>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act)
-        pLauncher =
+        setContentView(R.layout.activity_main)
+        requestPermissions() // and launch fragment
+    }
+
+
+    private fun requestPermissions() {
+        val pLauncher: ActivityResultLauncher<Array<String>> =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
                 if (it[Manifest.permission.READ_CONTACTS] == true) {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.list, ContactListFragment.newInstance())
-                        .commit()
+                    launchMainFragment()
                 }
             }
         if (ContextCompat.checkSelfPermission(
@@ -33,18 +38,16 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.list, ContactListFragment.newInstance())
-                .commit()
+            launchMainFragment()
         }
-
     }
 
-    override fun onBackPressed() {
-        val fManager = supportFragmentManager
-        if (fManager.backStackEntryCount > 0)
-            supportFragmentManager.popBackStack()
-        else
-            super.onBackPressed()
+
+    private fun launchMainFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.list, ContactListFragment.newInstance())
+            .commit()
     }
+
+
 }

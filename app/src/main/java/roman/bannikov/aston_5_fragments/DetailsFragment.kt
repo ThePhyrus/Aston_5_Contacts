@@ -16,15 +16,17 @@ import roman.bannikov.aston_5_fragments.databinding.FragmentDetailsBinding
 
 
 class DetailsFragment : Fragment() {
+
+    private var _binding: FragmentDetailsBinding? = null
+    private val binding: FragmentDetailsBinding get() = _binding!!
     private var contact: ContactModel? = null
-    private lateinit var binding: FragmentDetailsBinding
-    private val model: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,15 +42,15 @@ class DetailsFragment : Fragment() {
                 binding.tvNumber.text.toString(),
                 binding.tvLastName.text.toString()
             )
-            val d = requireActivity().findViewById<View>(R.id.details)
-            if (d != null) {
-                model.contactList.value = listOf()
+            val details = requireActivity().findViewById<View>(R.id.details)
+            if (details != null) {
+                viewModel.contactList.value = listOf()
                 getContacts()
             } else {
                 activity?.supportFragmentManager?.popBackStack()
             }
         }
-        model.contactInfo.observe(viewLifecycleOwner) {
+        viewModel.contactInfo.observe(viewLifecycleOwner) {
             val nameSplit = it.name.split(" ")
             val lastName = if (nameSplit.size > 1) {
                 nameSplit[1]
@@ -163,7 +165,7 @@ class DetailsFragment : Fragment() {
             cursor.close()
         }
         requireActivity().runOnUiThread {
-            model.contactList.value = list
+            viewModel.contactList.value = list
         }
     }
 
@@ -171,5 +173,10 @@ class DetailsFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = DetailsFragment()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
