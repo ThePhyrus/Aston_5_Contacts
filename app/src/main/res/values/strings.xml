@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Aston_5_Fragments</string>
+    <string name="name">Name</string>
+    <string name="lastname">Lastname</string>
+    <string name="phone_number">Phone number</string>
+    <string name="save">Save</string>
 </resources>
